@@ -1,0 +1,6 @@
+[submodule "intel80tools"]
+	path = intel80tools
+	url = https://github.com/ogdenpm/intel80tools
+[submodule "c-ports"]
+	path = c-ports
+	url = https://github.com/ogdenpm/c-ports
