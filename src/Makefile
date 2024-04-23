@@ -81,9 +81,15 @@ $(BDOS): bdos.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 ../bin/%.com: %.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 	$(ASM80) $<
 	$(LINK) $(<:%.asm=%.obj) to $(<:%.asm=%.lnk)
-	$(LOCATE) $(<:%.asm=%.lnk) to $(<:%.asm=%.loc) code \(0100h\) map
+	$(LOCATE) $(<:%.asm=%.lnk) to $(<:%.asm=%.loc) map
 	$(OBJHEX) $(<:%.asm=%.loc) to $(<:%.asm=%.hex)
 	$(HEXCOM) $@ < $(<:%.asm=%.hex)
+
+asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj
+	$(LINK) as0com.obj,as1io.obj,as2scan.obj,as3sym.obj,as4sear.obj,as5oper.obj,as6main.obj to $@
+
+asm.loc: asm.lnk
+	$(LOCATE) $(<:%.lnk=%.lnk) to $(<:%.lnk=%.loc) map
 
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys
