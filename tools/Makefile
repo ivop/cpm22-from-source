@@ -1,5 +1,5 @@
 hexcom: hexcom.c
-	$(CC) -o $@ $<
+	$(CC) -O3 -W -Wall -Wextra -o $@ $<
 
 clean:
 	rm -f *~ hexcom
