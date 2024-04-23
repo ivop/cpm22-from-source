@@ -7,8 +7,12 @@ LINK=../c-ports/Linux/Install/link
 LOCATE=../c-ports/Linux/Install/locate
 OBJHEX=../c-ports/Linux/Install/objhex
 HEXCOM=../tools/hexcom
+
 PLM80LIB=../intel80tools/itools/plm80.lib/plm80.lib
-CPMOBJ=cpm.obj
+SYSTEMLIB=systemlib.obj
+
+BDOS=bdos.sys
+CCP=ccp.sys
 
 PROGRAMS=ed load pip stat submit
 BINARIES=$(PROGRAMS:%=../bin/%.com)
@@ -16,7 +20,7 @@ SOURCES=$(BINARIES:%.com=%.plm)
 
 .PRECIOUS: %.hex %.loc %.lnk %.obj
 
-all: $(BINARIES)
+all: $(BINARIES) $(BDOS) $(CCP)
 
 $(ASM80):
 	+make -C ../c-ports/Linux/asm80
@@ -36,7 +40,10 @@ $(OBJHEX):
 $(HEXCOM):
 	+make -C ../tools hexcom
 
-$(CPMOBJ): cpm.asm
+$(SYSTEMLIB): systemlib.asm
+
+%.sys: %.asm $(ASM80)
+	$(ASM80) $<
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
@@ -47,8 +54,8 @@ $(CPMOBJ): cpm.asm
 %.loc: %.lnk $(LOCATE)
 	$(LOCATE) $< to $@ code\(100h\) stacksize\(100\) map
 
-%.lnk: %.obj $(LINK) $(CPMOBJ)
-	$(LINK) $<,$(CPMOBJ),$(PLM80LIB) to $@
+%.lnk: %.obj $(LINK) $(SYSTEMLIB)
+	$(LINK) $<,$(SYSTEMLIB),$(PLM80LIB) to $@
 
 %.obj: %.plm $(PLM80C)
 	$(PLM80C) $<
