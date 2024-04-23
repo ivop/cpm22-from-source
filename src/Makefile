@@ -14,13 +14,17 @@ SYSTEMLIB=systemlib.obj
 BDOS=../bin/bdos.sys
 CCP=../bin/ccp.sys
 
-PROGRAMS=ed load pip stat submit
-BINARIES=$(PROGRAMS:%=../bin/%.com)
-SOURCES=$(BINARIES:%.com=%.plm)
+PLMPROGRAMS=ed load pip stat submit
+PLMBINARIES=$(PLMPROGRAMS:%=../bin/%.com)
+PLMSOURCES=$(PLMBINARIES:%.com=%.plm)
+
+ASMPROGRAMS=dump
+ASMBINARIES=$(ASMPROGRAMS:%=../bin/%.com)
+ASMSOURCES=$(ASMBINARIES:%.com=%.asm)
 
 .PRECIOUS: %.hex %.loc %.lnk %.obj
 
-all: $(BINARIES) $(BDOS) $(CCP)
+all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES)
 
 $(ASM80):
 	+make -C ../c-ports/Linux/asm80
@@ -73,6 +77,13 @@ $(BDOS): bdos.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 
 ../bin/%.com: %.hex $(HEXCOM)
 	$(HEXCOM) $@ < $<
+
+../bin/%.com: %.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
+	$(ASM80) $<
+	$(LINK) $(<:%.asm=%.obj) to $(<:%.asm=%.lnk)
+	$(LOCATE) $(<:%.asm=%.lnk) to $(<:%.asm=%.loc) code \(0100h\) map
+	$(OBJHEX) $(<:%.asm=%.loc) to $(<:%.asm=%.hex)
+	$(HEXCOM) $@ < $(<:%.asm=%.hex)
 
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys

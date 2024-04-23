@@ -5,7 +5,7 @@
 ;       BOX 579, PACIFIC GROVE
 ;       CALIFORNIA, 93950
 ;
-        ORG     100H
+        ORG     0100H
 BDOS    EQU     0005H   ;DOS ENTRY POINT
 CONS    EQU     1       ;READ CONSOLE
 TYPEF   EQU     2       ;TYPE FUNCTION
@@ -98,18 +98,26 @@ FINIS:
 ;       SUBROUTINES
 ;
 BREAK:  ;CHECK BREAK KEY (ACTUALLY ANY KEY WILL DO)
-        PUSH H! PUSH D! PUSH B; ENVIRONMENT SAVED
+        PUSH H
+        PUSH D
+        PUSH B; ENVIRONMENT SAVED
         MVI     C,BRKF
         CALL    BDOS
-        POP B! POP D! POP H; ENVIRONMENT RESTORED
+        POP B
+        POP D
+        POP H; ENVIRONMENT RESTORED
         RET
 ;
 PCHAR:  ;PRINT A CHARACTER
-        PUSH H! PUSH D! PUSH B; SAVED
+        PUSH H
+        PUSH D
+        PUSH B; SAVED
         MVI     C,TYPEF
         MOV     E,A
         CALL    BDOS
-        POP B! POP D! POP H; RESTORED
+        POP B
+        POP D
+        POP H; RESTORED
         RET
 ;
 CRLF:
@@ -192,11 +200,15 @@ SETUP:  ;SET UP FILE
         RET
 ;
 DISKR:  ;READ DISK FILE RECORD
-        PUSH H! PUSH D! PUSH B
+        PUSH H
+        PUSH D
+        PUSH B
         LXI     D,FCB
         MVI     C,READF
         CALL    BDOS
-        POP B! POP D! POP H
+        POP B
+        POP D
+        POP H
         RET
 ;
 ;       FIXED MESSAGE AREA
