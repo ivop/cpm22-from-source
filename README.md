@@ -25,8 +25,9 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 
 #### ASM
 
-* DUMP
 * ASM
+  * The original DRI Assembler. Can be used on real hardware, or on an emulator, to assemble the original sources in the _archive_ directory.
+* DUMP
 
 ## Notes
 
@@ -35,5 +36,5 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 * The assembly sources are slightly modified to be compatible with the Intel assembler. Changes are:
   * One mnemonic per line.
   * Some double definitions and the title lines are commented out.
-* To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the core functionality in systemlib.asm.
+* To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the needed functionality in systemlib.asm.
 
