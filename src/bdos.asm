@@ -16,6 +16,7 @@
 ;
 ;      20 january 1980
 ;
+patch1  equ     1
 ;
 on      equ     0ffffh
 off     equ     00000h
@@ -2292,10 +2293,17 @@ diskwrite:      ;(may enter here from seqdiskwrite above)
                 inr m ;rcount = vrecord+1
                 mvi c,2 ;mark as record count incremented
         diskwr2:
+if patch1
+        ; CP/M V2.2 patch 1 for use of optional blocking/deblocking
+        nop
+        nop
+        lxi h,0
+else
         ;A has vrecord, C=2 if new block or new record#
         dcr c
         dcr c
         jnz noupdate
+endif
                 push psw ;save vrecord value
                 call getmodnum ;HL=.fcb(modnum), A=fcb(modnum)
                 ;reset the file write flag to mark as written fcb

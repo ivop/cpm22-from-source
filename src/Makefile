@@ -11,8 +11,8 @@ HEXCOM=../tools/hexcom
 PLM80LIB=../intel80tools/itools/plm80.lib/plm80.lib
 SYSTEMLIB=systemlib.obj
 
-BDOS=bdos.sys
-CCP=ccp.sys
+BDOS=../bin/bdos.sys
+CCP=../bin/ccp.sys
 
 PROGRAMS=ed load pip stat submit
 BINARIES=$(PROGRAMS:%=../bin/%.com)
@@ -42,15 +42,19 @@ $(HEXCOM):
 
 $(SYSTEMLIB): systemlib.asm
 
-$(CCP): ccp.asm
+$(CCP): ccp.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 	$(ASM80) $<
 	$(LINK) ccp.obj to ccp.lnk
 	$(LOCATE) ccp.lnk to ccp.loc code \(e400h\) map
 	$(OBJHEX) ccp.loc to ccp.hex
 	$(HEXCOM) $@ < ccp.hex
 
-$(BDOS): bdos.asm
+$(BDOS): bdos.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 	$(ASM80) $<
+	$(LINK) bdos.obj to bdos.lnk
+	$(LOCATE) bdos.lnk to bdos.loc code \(ec00h\) map
+	$(OBJHEX) bdos.loc to bdos.hex
+	$(HEXCOM) $@ < bdos.hex
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
