@@ -50,6 +50,7 @@ $(CCP): ccp.asm
 	$(HEXCOM) $@ < ccp.hex
 
 $(BDOS): bdos.asm
+	$(ASM80) $<
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
@@ -70,7 +71,7 @@ $(BDOS): bdos.asm
 	$(HEXCOM) $@ < $<
 
 clean:
-	rm -f *~ *.lst *.loc *.hex *.obj *.lnk
+	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys
 	+make -C ../tools clean
 	+make -C ../c-ports/Linux clean
 	rm -rf ../bin/*
