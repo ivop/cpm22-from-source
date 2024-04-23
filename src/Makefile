@@ -43,6 +43,11 @@ $(HEXCOM):
 $(SYSTEMLIB): systemlib.asm
 
 $(CCP): ccp.asm
+	$(ASM80) $<
+	$(LINK) ccp.obj to ccp.lnk
+	$(LOCATE) ccp.lnk to ccp.loc code \(e400h\) map
+	$(OBJHEX) ccp.loc to ccp.hex
+	$(HEXCOM) $@ < ccp.hex
 
 $(BDOS): bdos.asm
 

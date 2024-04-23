@@ -12,6 +12,7 @@ $NOLIST
 false   equ     0000h
 true    equ     not false
 testing equ     false   ;true if debugging
+noserial equ    true
 ;
 ;
         if      testing
@@ -357,6 +358,7 @@ del$sub:
         lda cdisk
         jmp select ;back to original drive
 ;
+if not noserial
 serialize:
         ;check serialization
         lxi d,serial
@@ -370,6 +372,7 @@ serialize:
                 dcr b
                 jnz ser0
                 ret ;serial number is ok
+endif
 ;
 comerr:
         ;error in command string starting at position
@@ -683,6 +686,7 @@ ccp0:   ;(enter here from initialization with command full)
                         dw      rename  ;file rename
                         dw      user    ;user number
                         dw      userfunc;user-defined function
+if not noserial
                 badserial:
                         lxi h,076F3H
                         ;typo "lxi h,di or (hlt shl 8)" here originally,
@@ -692,6 +696,7 @@ ccp0:   ;(enter here from initialization with command full)
                         lxi h,ccploc
                         pchl
                         ;
+endif
 ;
         ;utility subroutines for intrinsic handlers
         readerr:
@@ -1093,7 +1098,9 @@ jnc comerr; must be between 0 and 15
         jmp endcom
 ;
 userfunc:
+if not noserial
         call serialize ;check serialization
+endif
         ;load user function and set up for execution
         lda comfcb+1
         cpi ' '
