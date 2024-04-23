@@ -29,6 +29,14 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
   * The original DRI Assembler. Can be used on real hardware, or on an emulator, to assemble the original sources in the _archive_ directory.
 * DUMP
 
+#### NOSRC
+
+* HEXCOM
+* LIB
+* LINK
+* MAC
+  * The original DRI ASM succesor that had added macro capabilities.
+
 ## Notes
 
 * The assembler used is the ISIS-II Intel 8080/8085 Macro Assembler, v4.1, ported to C by Mark Ogden.
@@ -37,4 +45,5 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
   * One mnemonic per line.
   * Some double definitions and the title lines are commented out.
 * To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the needed functionality in systemlib.asm.
+* The _nosrc_ directory contains several utilities need on real hardware for which no source has been found.
 
