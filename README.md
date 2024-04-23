@@ -55,4 +55,4 @@ All built binaries end up in the _bin_ directory.
   * One mnemonic per line.
   * Some double definitions and the title lines are commented out.
 * To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the needed functionality in systemlib.asm.
-* The _nosrc_ directory contains several utilities need on real hardware for which no source has been found.
+* The _nosrc_ directory contains several utilities needed on real hardware for which no source has been found.
