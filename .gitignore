@@ -1,0 +1,7 @@
+*~
+*.lnk
+*.lst
+*.loc
+*.hex
+*.obj
+tools/hexcom
