@@ -1,4 +1,3 @@
-$NOLIST
 ;       title   'console command processor (CCP), ver 2.0'
 ;       assembly language version of the CP/M console command processor
 ;
