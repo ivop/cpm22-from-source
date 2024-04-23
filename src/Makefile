@@ -83,6 +83,10 @@ $(BDOS): BDOS.ASM $(ASM)
 	$(OBJHEX) $(<:%.asm=%.loc) to $(<:%.asm=%.hex)
 	$(HEXCOM) $@ < $(<:%.asm=%.hex)
 
+../bin/dump.com: DUMP.ASM $(ASM)
+	$(ASM) DUMP
+	cp DUMP.BIN $@
+
 asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj
 	$(LINK) as0com.obj,as1io.obj,as2scan.obj,as3sym.obj,as4sear.obj,as5oper.obj,as6main.obj to $@
 
