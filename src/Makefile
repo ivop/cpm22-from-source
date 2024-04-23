@@ -42,8 +42,9 @@ $(HEXCOM):
 
 $(SYSTEMLIB): systemlib.asm
 
-%.sys: %.asm $(ASM80)
-	$(ASM80) $<
+$(CCP): ccp.asm
+
+$(BDOS): bdos.asm
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
