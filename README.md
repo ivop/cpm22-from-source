@@ -36,6 +36,17 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 * MAC
   * The original DRI ASM succesor that had added macro capabilities.
 
+## Build instructions
+
+```
+git clone https://github.com/ivop/cpm22-from-source/
+cd cpm22-from-source
+git submodule update --init --recursive
+make -j8
+```
+
+All built binaries end up in the _bin_ directory.
+
 ## Notes
 
 * BDOS and CCP are assembled with David Given's ASM reimplementation. The other ASM files are assembled with the ISIS-II Intel 8080/8085 Macro Assembler, v4.1, ported to C by Mark Ogden.
@@ -44,4 +55,4 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
   * One mnemonic per line.
   * Some double definitions and the title lines are commented out.
 * To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the needed functionality in systemlib.asm.
-* The _nosrc_ directory contains several utilities need on real hardware for which no source has been found.
+* The _nosrc_ directory contains several utilities needed on real hardware for which no source has been found.
