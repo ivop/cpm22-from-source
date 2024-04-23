@@ -69,7 +69,7 @@ $(BDOS): bdos.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
 %.loc: %.lnk $(LOCATE)
 	$(LOCATE) $< to $@ code\(100h\) stacksize\(100\) map
 
-%.lnk: %.obj $(LINK) $(SYSTEMLIB)
+%.lnk: %.obj $(LINK) $(SYSTEMLIB) $(PLM80LIB)
 	$(LINK) $<,$(SYSTEMLIB),$(PLM80LIB) to $@
 
 %.obj: %.plm $(PLM80C)
