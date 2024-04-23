@@ -6,6 +6,7 @@ PLM80C=../c-ports/Linux/Install/plm80c
 LINK=../c-ports/Linux/Install/link
 LOCATE=../c-ports/Linux/Install/locate
 OBJHEX=../c-ports/Linux/Install/objhex
+ASM=../tools/asm/asm
 HEXCOM=../tools/hexcom
 
 PLM80LIB=../intel80tools/itools/plm80.lib/plm80.lib
@@ -41,24 +42,21 @@ $(LOCATE):
 $(OBJHEX):
 	+make -C ../c-ports/Linux/objhex
 
+$(ASM):
+	+make -C ../tools/asm asm
+
 $(HEXCOM):
 	+make -C ../tools hexcom
 
 $(SYSTEMLIB): systemlib.asm
 
-$(CCP): ccp.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
-	$(ASM80) $<
-	$(LINK) ccp.obj to ccp.lnk
-	$(LOCATE) ccp.lnk to ccp.loc code \(e400h\) map
-	$(OBJHEX) ccp.loc to ccp.hex
-	$(HEXCOM) $@ < ccp.hex
+$(CCP): CCP.ASM $(ASM)
+	$(ASM) CCP
+	cp CCP.BIN $(CCP)
 
-$(BDOS): bdos.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
-	$(ASM80) $<
-	$(LINK) bdos.obj to bdos.lnk
-	$(LOCATE) bdos.lnk to bdos.loc code \(ec00h\) map
-	$(OBJHEX) bdos.loc to bdos.hex
-	$(HEXCOM) $@ < bdos.hex
+$(BDOS): BDOS.ASM $(ASM)
+	$(ASM) BDOS
+	cp BDOS.BIN $(BDOS)
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
@@ -94,6 +92,7 @@ asm.loc: asm.lnk
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys
 	+make -C ../tools clean
+	+make -C ../tools/asm clean
 	+make -C ../c-ports/Linux clean
 	rm -rf ../bin/*
 

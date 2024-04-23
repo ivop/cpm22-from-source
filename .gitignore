@@ -4,4 +4,5 @@
 *.loc
 *.hex
 *.obj
+*.BIN
 tools/hexcom

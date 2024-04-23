@@ -1287,7 +1287,7 @@ void mvi_cb(void)
 
 void end_cb(void) {}
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 #ifndef IGNORE
     uint8_t* rambottom;
@@ -1434,5 +1434,6 @@ void main(int argc, char **argv)
     printx("kB used");
 #else
     printx("");
+    return 0;
 #endif
 }
