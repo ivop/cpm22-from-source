@@ -18,7 +18,7 @@ PLMPROGRAMS=ed load pip stat submit
 PLMBINARIES=$(PLMPROGRAMS:%=../bin/%.com)
 PLMSOURCES=$(PLMBINARIES:%.com=%.plm)
 
-ASMPROGRAMS=dump
+ASMPROGRAMS=asm dump
 ASMBINARIES=$(ASMPROGRAMS:%=../bin/%.com)
 ASMSOURCES=$(ASMBINARIES:%.com=%.asm)
 
