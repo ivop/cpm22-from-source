@@ -6,4 +6,5 @@
 *.obj
 *.BIN
 *.PRN
-tools/hexcom
+tools/hexcom/hexcom
+tools/asm/asm

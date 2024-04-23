@@ -7,7 +7,7 @@ LINK=../c-ports/Linux/Install/link
 LOCATE=../c-ports/Linux/Install/locate
 OBJHEX=../c-ports/Linux/Install/objhex
 ASM=../tools/asm/asm
-HEXCOM=../tools/hexcom
+HEXCOM=../tools/hexcom/hexcom
 
 PLM80LIB=../intel80tools/itools/plm80.lib/plm80.lib
 SYSTEMLIB=systemlib.obj
@@ -46,7 +46,7 @@ $(ASM):
 	+make -C ../tools/asm asm
 
 $(HEXCOM):
-	+make -C ../tools hexcom
+	+make -C ../tools/hexcom hexcom
 
 $(SYSTEMLIB): systemlib.asm
 
@@ -91,7 +91,7 @@ asm.loc: asm.lnk
 
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys
-	+make -C ../tools clean
+	+make -C ../tools/hexcom clean
 	+make -C ../tools/asm clean
 	+make -C ../c-ports/Linux clean
 	rm -rf ../bin/*
