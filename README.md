@@ -49,7 +49,7 @@ All built binaries end up in the _bin_ directory.
 
 ## Notes
 
-* BDOS and CCP are assembled with David Given's ASM reimplementation. The other ASM files are assembled with the ISIS-II Intel 8080/8085 Macro Assembler, v4.1, ported to C by Mark Ogden.
+* BDOS, CCP, and DUMP are assembled with David Given's ASM reimplementation. The other ASM files are assembled with the ISIS-II Intel 8080/8085 Macro Assembler, v4.1, ported to C by Mark Ogden.
 * PL/M is compiled with the ISIS-II PL/M-80 Compiler v4.0, also ported to C by Mark Ogden.
 * The assembly sources which are assembled with the Intel assembler are slightly modified to be compatible. Changes are:
   * One mnemonic per line.
