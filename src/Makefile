@@ -87,14 +87,14 @@ $(BDOS): BDOS.ASM $(ASM)
 	$(ASM) DUMP
 	cp DUMP.BIN $@
 
-asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj
+asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj $(LINK)
 	$(LINK) as0com.obj,as1io.obj,as2scan.obj,as3sym.obj,as4sear.obj,as5oper.obj,as6main.obj to $@
 
-asm.loc: asm.lnk
-	$(LOCATE) $(<:%.lnk=%.lnk) to $(<:%.lnk=%.loc) map
+asm.loc: asm.lnk $(LOCATE)
+	$(LOCATE) $< to $(<:%.lnk=%.loc) map
 
 clean:
-	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys
+	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys *.BIN *.PRN
 	+make -C ../tools/hexcom clean
 	+make -C ../tools/asm clean
 	+make -C ../c-ports/Linux clean
