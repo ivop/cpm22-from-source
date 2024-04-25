@@ -8,3 +8,4 @@
 *.PRN
 tools/hexcom/hexcom
 tools/asm/asm
+tools/genprlmap/genprlmap

@@ -8,6 +8,7 @@ LOCATE=../c-ports/Linux/Install/locate
 OBJHEX=../c-ports/Linux/Install/objhex
 ASM=../tools/asm/asm
 HEXCOM=../tools/hexcom/hexcom
+GENPRLMAP=../tools/genprlmap/genprlmap
 
 PLM80LIB=../intel80tools/itools/plm80.lib/plm80.lib
 SYSTEMLIB=systemlib.obj
@@ -48,6 +49,9 @@ $(ASM):
 $(HEXCOM):
 	+make -C ../tools/hexcom hexcom
 
+$(GENPRLMAP):
+	+make -C ../tools/genprlmap genprlmap
+
 $(SYSTEMLIB): systemlib.asm
 
 $(CCP): CCP.ASM $(ASM)
@@ -73,7 +77,7 @@ $(BDOS): BDOS.ASM $(ASM)
 %.obj: %.plm $(PLM80C)
 	$(PLM80C) $<
 
-../bin/%.com: %.hex $(HEXCOM)
+%.com: %.hex $(HEXCOM)
 	$(HEXCOM) $@ < $<
 
 ../bin/%.com: %.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
@@ -93,8 +97,52 @@ asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6
 asm.loc: asm.lnk $(LOCATE)
 	$(LOCATE) $< to $(<:%.lnk=%.loc) map
 
+# CONVOLUTED DDT RULES ;)
+
+ddt0mov.loc: ddt0mov.lnk $(LOCATE)
+	$(LOCATE) $< to $@ map
+
+ddt0mov-padded.com: ddt0mov.com
+	dd if=/dev/zero of=$@ bs=1 count=256
+	dd if=$< of=$@ bs=1 conv=notrunc
+
+ddt1asm.loc: ddt1asm.lnk $(LOCATE)
+	$(LOCATE) $< to $@ code \(0000H\) stacksize\(0\) map
+
+ddt1asm-padded.com: ddt1asm.com
+	dd if=/dev/zero of=$@ bs=1 count=1664
+	dd if=$< of=$@ bs=1 conv=notrunc
+
+ddt1asm-nextpage.loc: ddt1asm.lnk $(LOCATE)
+	$(LOCATE) $< to $@ code \(0100H\) stacksize\(0\) map
+
+ddt1asm-nextpage-padded.com: ddt1asm-nextpage.com
+	dd if=/dev/zero of=$@ bs=1 count=1664
+	dd if=$< of=$@ bs=1 conv=notrunc
+
+ddt2mon.loc: ddt2mon.lnk $(LOCATE)
+	$(LOCATE) $< to $@ code \(0000H\) map
+
+ddt2mon-nextpage.loc: ddt2mon.lnk $(LOCATE)
+	$(LOCATE) $< to $@ code \(0100H\) stacksize\(0\) map
+
+ddt12.com: ddt1asm-padded.com ddt2mon.com
+	cat $^ > $@
+
+ddt12-nextpage.com: ddt1asm-nextpage-padded.com ddt2mon-nextpage.com
+	cat $^ > $@
+
+ddt.map: ddt12.com ddt12-nextpage.com $(GENPRLMAP)
+	$(GENPRLMAP) ddt12.com ddt12-nextpage.com $@
+
+ddt.com: ddt0mov-padded.com ddt12.com ddt.map
+	cat $^ > $@
+	/usr/bin/printf "\xbc\x0f" | dd of=$@ bs=1 seek=1 conv=notrunc
+
+../bin/ddt.com: ddt0mov-padded.com
+
 clean:
-	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys *.BIN *.PRN
+	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys *.BIN *.PRN *.com *.map
 	+make -C ../tools/hexcom clean
 	+make -C ../tools/asm clean
 	+make -C ../c-ports/Linux clean
