@@ -20,7 +20,7 @@ PLMPROGRAMS=ed load pip stat submit
 PLMBINARIES=$(PLMPROGRAMS:%=../bin/%.com)
 PLMSOURCES=$(PLMBINARIES:%.com=%.plm)
 
-ASMPROGRAMS=asm dump
+ASMPROGRAMS=asm dump mload sd
 ASMBINARIES=$(ASMPROGRAMS:%=../bin/%.com)
 ASMSOURCES=$(ASMBINARIES:%.com=%.asm)
 
@@ -28,7 +28,7 @@ DDTBINARY=../bin/ddt.com
 
 .PRECIOUS: %.hex %.loc %.lnk %.obj
 
-all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES) $(DDTBINARY)
+all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES) $(DDTBINARY) $(THIRDPARTYBIN)
 
 $(ASM80):
 	+make -C ../c-ports/Linux/asm80
@@ -95,6 +95,14 @@ $(BDOS): BDOS.ASM $(ASM)
 ../bin/dump.com: DUMP.ASM $(ASM)
 	$(ASM) DUMP
 	cp DUMP.BIN $@
+
+../bin/mload.com: MLOAD.ASM $(ASM)
+	$(ASM) MLOAD
+	cp MLOAD.BIN $@
+
+../bin/sd.com: SD137.ASM $(ASM)
+	$(ASM) SD137
+	cp SD137.BIN $@
 
 asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj $(LINK)
 	$(LINK) as0com.obj,as1io.obj,as2scan.obj,as3sym.obj,as4sear.obj,as5oper.obj,as6main.obj to $@
