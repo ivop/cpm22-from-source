@@ -26,6 +26,7 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 #### ASM
 
 * ASM
+* DDT
 * DUMP
 
 #### NOSRC
@@ -56,3 +57,4 @@ All built binaries end up in the _bin_ directory.
   * Some double definitions and the title lines are commented out.
 * To link PL/M applications, SYSTEM.LIB is needed. As it was nowhere to be found, I reimplemented the needed functionality in systemlib.asm.
 * The _nosrc_ directory contains several utilities needed on real hardware for which no source has been found.
+* Originally, DDT was assembled twice, but with ASM80 we can assemble it once and  _locate_ it to 0000H and 0100H respectively to generate the Page ReLocate bitmap. It is unknown how the original bitmap was generated, so a new utility _genprlmap_ was written.
