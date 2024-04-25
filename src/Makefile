@@ -24,9 +24,11 @@ ASMPROGRAMS=asm dump
 ASMBINARIES=$(ASMPROGRAMS:%=../bin/%.com)
 ASMSOURCES=$(ASMBINARIES:%.com=%.asm)
 
+DDTBINARY=../bin/ddt.com
+
 .PRECIOUS: %.hex %.loc %.lnk %.obj
 
-all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES)
+all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES) $(DDTBINARY)
 
 $(ASM80):
 	+make -C ../c-ports/Linux/asm80
@@ -78,6 +80,9 @@ $(BDOS): BDOS.ASM $(ASM)
 	$(PLM80C) $<
 
 %.com: %.hex $(HEXCOM)
+	$(HEXCOM) $@ < $<
+
+../bin/%.com: %.hex $(HEXCOM)
 	$(HEXCOM) $@ < $<
 
 ../bin/%.com: %.asm $(ASM80) $(LINK) $(LOCATE) $(OBJHEX) $(HEXCOM)
@@ -135,11 +140,9 @@ ddt12-nextpage.com: ddt1asm-nextpage-padded.com ddt2mon-nextpage.com
 ddt.map: ddt12.com ddt12-nextpage.com $(GENPRLMAP)
 	$(GENPRLMAP) ddt12.com ddt12-nextpage.com $@
 
-ddt.com: ddt0mov-padded.com ddt12.com ddt.map
+$(DDTBINARY): ddt0mov-padded.com ddt12.com ddt.map
 	cat $^ > $@
 	/usr/bin/printf "\xbc\x0f" | dd of=$@ bs=1 seek=1 conv=notrunc
-
-../bin/ddt.com: ddt0mov-padded.com
 
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys *.BIN *.PRN *.com *.map
