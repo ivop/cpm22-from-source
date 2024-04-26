@@ -1,3 +1,12 @@
+/*
+ * Simulate just enough CP/M to get asm.c working with minimal changes to
+ * the original source.
+ *
+ * Copyright © 2024, by Ivo van Poorten
+ * This software is redistributable under the terms of the MIT license.
+ * See LICENSE for details.
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
