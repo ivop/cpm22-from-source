@@ -4,7 +4,7 @@
  * Used by DDT.COM
  *
  * Copyright © 2024 Ivo van Poorten
- * BSD-2 License
+ * See LICENSE for details.
  *
  * usage: ./genprlmap in1.com in2.com out.map
  *
