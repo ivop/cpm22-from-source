@@ -17,15 +17,15 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 
 #### PL/M
 
-* ED -- the editor
+* ED -- editor
 * LOAD -- convert HEX to COM
-* PIP -- the copy utility
+* PIP -- copy utility
 * STAT -- status of files and devices
 * SUBMIT -- batch processing
 
 #### ASM
 
-* ASM -- the native DRI assembler
+* ASM -- native DRI assembler
 * DDT -- dynamic debugging tool
 * DUMP -- dump hexadecimal listing to conout
 
