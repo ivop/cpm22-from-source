@@ -17,30 +17,29 @@ Build CP/M 2.2 from the original Digital Research Inc. source code on Linux.
 
 #### PL/M
 
-* ED
-* LOAD
-* PIP
-* STAT
-* SUBMIT
+* ED -- the editor
+* LOAD -- convert HEX to COM
+* PIP -- the copy utility
+* STAT -- status of files and devices
+* SUBMIT -- batch processing
 
 #### ASM
 
-* ASM
-* DDT
-* DUMP
+* ASM -- the native DRI assembler
+* DDT -- dynamic debugging tool
+* DUMP -- dump hexadecimal listing to conout
 
 #### Third-party ASM
 
-* MLOAD
-* SD
+* MLOAD -- alternative LOAD with more options
+* SD -- Super Directory DIR replacement
 
 #### NOSRC
 
-* HEXCOM
-* LIB
-* LINK
-* MAC
-  * The original DRI ASM succesor that had added macro capabilities.
+* HEXCOM -- another HEX to COM converter
+* LIB -- library tool
+* LINK -- linker
+* MAC -- DRI Macro assembler, ASM with macros
 
 ## Build instructions
 
