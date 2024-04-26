@@ -18,17 +18,19 @@ CCP=../bin/ccp.sys
 
 PLMPROGRAMS=ed load pip stat submit
 PLMBINARIES=$(PLMPROGRAMS:%=../bin/%.com)
-PLMSOURCES=$(PLMBINARIES:%.com=%.plm)
 
 ASMPROGRAMS=asm dump mload sd
 ASMBINARIES=$(ASMPROGRAMS:%=../bin/%.com)
-ASMSOURCES=$(ASMBINARIES:%.com=%.asm)
 
 DDTBINARY=../bin/ddt.com
 
 .PRECIOUS: %.hex %.loc %.lnk %.obj
 
-all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES) $(DDTBINARY) $(THIRDPARTYBIN)
+all: $(PLMBINARIES) $(BDOS) $(CCP) $(ASMBINARIES) $(DDTBINARY)
+
+# ----------------------------------------------------------------------------
+
+# All tools
 
 $(ASM80):
 	+make -C ../c-ports/Linux/asm80
@@ -54,15 +56,13 @@ $(HEXCOM):
 $(GENPRLMAP):
 	+make -C ../tools/genprlmap genprlmap
 
+# SYSTEM.LIB replacement for PL/M programs
+
 $(SYSTEMLIB): systemlib.asm
 
-$(CCP): CCP.ASM $(ASM)
-	$(ASM) CCP
-	cp CCP.BIN $(CCP)
+# ----------------------------------------------------------------------------
 
-$(BDOS): BDOS.ASM $(ASM)
-	$(ASM) BDOS
-	cp BDOS.BIN $(BDOS)
+# .asm --> ISIS-II Intel 8080 Assembler
 
 %.obj: %.asm $(ASM80)
 	$(ASM80) $<
@@ -92,17 +92,21 @@ $(BDOS): BDOS.ASM $(ASM)
 	$(OBJHEX) $(<:%.asm=%.loc) to $(<:%.asm=%.hex)
 	$(HEXCOM) $@ < $(<:%.asm=%.hex)
 
-../bin/dump.com: DUMP.ASM $(ASM)
-	$(ASM) DUMP
-	cp DUMP.BIN $@
+# ----------------------------------------------------------------------------
 
-../bin/mload.com: MLOAD.ASM $(ASM)
-	$(ASM) MLOAD
-	cp MLOAD.BIN $@
+# .ASM --> CP/M DRI ASM Assembler
 
-../bin/sd.com: SD137.ASM $(ASM)
-	$(ASM) SD137
-	cp SD137.BIN $@
+../bin/%.sys: %.ASM $(ASM)
+	$(ASM) $(<:%.ASM=%)
+	cp $(<:%.ASM=%.BIN) $@
+
+../bin/%.com: %.ASM $(ASM)
+	$(ASM) $(<:%.ASM=%)
+	cp $(<:%.ASM=%.BIN) $@
+
+# ----------------------------------------------------------------------------
+
+# Multi-part ISIS-II ASM80 link rule
 
 asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6main.obj $(LINK)
 	$(LINK) as0com.obj,as1io.obj,as2scan.obj,as3sym.obj,as4sear.obj,as5oper.obj,as6main.obj to $@
@@ -110,7 +114,9 @@ asm.lnk: as0com.obj as1io.obj as2scan.obj as3sym.obj as4sear.obj as5oper.obj as6
 asm.loc: asm.lnk $(LOCATE)
 	$(LOCATE) $< to $(<:%.lnk=%.loc) map
 
-# CONVOLUTED DDT RULES ;)
+# ----------------------------------------------------------------------------
+
+# DDT RULES ;)
 
 ddt0mov.loc: ddt0mov.lnk $(LOCATE)
 	$(LOCATE) $< to $@ map
@@ -151,6 +157,8 @@ ddt.map: ddt12.com ddt12-nextpage.com $(GENPRLMAP)
 $(DDTBINARY): ddt0mov-padded.com ddt12.com ddt.map
 	cat $^ > $@
 	/usr/bin/printf "\xbc\x0f" | dd of=$@ bs=1 seek=1 conv=notrunc
+
+# ----------------------------------------------------------------------------
 
 clean:
 	rm -f *~ *.lst *.loc *.hex *.obj *.lnk *.sys *.BIN *.PRN *.com *.map
