@@ -1,7 +1,8 @@
 /*
  * Very simple 'genhex'
  *
- * by Ivo van Poorten, 2024, Public Domain.
+ * Copyright (C) 2024 by Ivo van Poorten
+ * See LICENSE for details.
  *
  * usage: genhex file.com [start address in hexadecimal] > output.hex
  */
