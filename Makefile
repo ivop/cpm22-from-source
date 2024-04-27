@@ -5,5 +5,5 @@ clean:
 	rm -f *~
 	+make -C src clean
 
-distclean:
+distclean: clean
 	+make -C src distclean
